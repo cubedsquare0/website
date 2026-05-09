@@ -167,32 +167,32 @@ function signup(event) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data)
   })
-  .then(response => {
-    if (!response.ok) throw new Error('Signup failed');
-    return response.json();
-  })
-  .then(result => {
-    if (result.message) {
+    .then(response => {
+      if (!response.ok) throw new Error('Signup failed');
+      return response.json();
+    })
+    .then(result => {
+      if (result.message) {
+        showMessage(result.message, 'success');
+        document.getElementById('show-login').click();
+      } else {
+        showMessage(result.error, 'error');
+      }
+    })
+    .catch(error => showMessage(error.message, 'error'));
+}
+
+function logout() {
+  fetch(`${apiBase}/api/logout`, { method: 'POST' })
+    .then(response => {
+      if (!response.ok) throw new Error('Logout failed');
+      return response.json();
+    })
+    .then(result => {
       showMessage(result.message, 'success');
-      document.getElementById('show-login').click();
-    } else {
-      showMessage(result.error, 'error');
-    }
-  })
-  .catch(error => shapi/logout`, { method: 'POST' })
-  .then(response => {
-    if (!response.ok) throw new Error('Logout failed');
-    return response.json();
-  })
-  .then(result => {
-    showMessage(result.message, 'success');
-    checkUser();
-  })
-  .catch(error => showMessage(error.message, 'error')then(response => response.json())
-  .then(result => {
-    showMessage(result.message, 'success');
-    checkUser();
-  });
+      checkUser();
+    })
+    .catch(error => showMessage(error.message, 'error'));
 }
 
 function toggleForm(show) {
