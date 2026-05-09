@@ -21,10 +21,16 @@ app.use(limiter);
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.set('trust proxy', 1);
 app.use(session({
   secret: 'cubed-square-secret-key', // Change this in production
   resave: false,
-  saveUninitialized: false
+  saveUninitialized: false,
+  cookie: {
+    secure: process.env.NODE_ENV === 'production',
+    httpOnly: true,
+    sameSite: 'lax'
+  }
 }));
 
 // Serve static files from the frontend directory
