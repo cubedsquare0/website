@@ -1,16 +1,16 @@
 // script.js
 
-let apiBase = 'https://cubesquared0server.cubedsquare0.workers.dev'; // Default, will be updated from config
+let apiBase = window.location.origin; // Use current host by default; config can override it
 
 // Load config from server
 function loadConfig() {
   return fetch('/api/config')
     .then(response => response.json())
     .then(data => {
-      apiBase = data.apiBase;
+      apiBase = data.apiBase || apiBase;
     })
     .catch(() => {
-      // Keep default if fetch fails
+      // Keep current origin if fetch fails
     });
 }
 
