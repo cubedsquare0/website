@@ -34,7 +34,7 @@ jobs:
           npm ci
 
       - name: Semantic Release
-        uses: cycjimmy/semantic-release-action@v3
+        uses: cycjimmy/semantic-release-action@v6.0.0
         with:
           semantic_version: 18
           working_directory: ./backend
