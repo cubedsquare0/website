@@ -17,8 +17,9 @@ addEventListener('fetch', event => {
 
 async function handleRequest(request) {
   const url = new URL(request.url);
+  const origin = url.origin;
+  const path = url.pathname;
 
-  // Set CORS headers
   const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
@@ -29,43 +30,44 @@ async function handleRequest(request) {
     return new Response(null, { headers: corsHeaders });
   }
 
-  if (url.pathname === '/api/config') {
-    return new Response(JSON.stringify({ apiBase: 'https://cubesquared0server.cubedsquared0.workers.dev' }), {
+  if (path === '/api/config') {
+    const apiBase = typeof API_BASE !== 'undefined' && API_BASE ? API_BASE : origin;
+    return new Response(JSON.stringify({ apiBase }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' }
     });
   }
 
-  if (url.pathname === '/api/news') {
+  if (path === '/api/news') {
     return new Response(JSON.stringify(news), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' }
     });
   }
 
-  if (url.pathname === '/api/store') {
+  if (path === '/api/store') {
     return new Response(JSON.stringify(storeItems), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' }
     });
   }
 
-  if (url.pathname === '/api/user') {
+  if (path === '/api/user') {
     return new Response(JSON.stringify({ username: null }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' }
     });
   }
 
-  if (url.pathname === '/api/login' && request.method === 'POST') {
+  if ((path === '/api/login' || path === '/login') && request.method === 'POST') {
     return new Response(JSON.stringify({ message: 'Login successful' }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' }
     });
   }
 
-  if (url.pathname === '/api/signup' && request.method === 'POST') {
+  if ((path === '/api/signup' || path === '/signup') && request.method === 'POST') {
     return new Response(JSON.stringify({ message: 'Signup successful' }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' }
     });
   }
 
-  if (url.pathname === '/api/logout' && request.method === 'POST') {
+  if ((path === '/api/logout' || path === '/logout') && request.method === 'POST') {
     return new Response(JSON.stringify({ message: 'Logout successful' }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' }
     });
