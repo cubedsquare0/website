@@ -25,13 +25,35 @@
 
   <section style="padding-top: 80px;">
     <h1>Account</h1>
-    <form>
-      <label for="username">Username:</label>
-      <input type="text" id="username" name="username"><br>
-      <label for="password">Password:</label>
-      <input type="password" id="password" name="password"><br>
-      <button type="submit">Login</button>
-    </form>
+    <div id="auth-forms">
+      <div id="login-form">
+        <h2>Login</h2>
+        <form id="login">
+          <label for="login-username">Username:</label>
+          <input type="text" id="login-username" name="username" required><br>
+          <label for="login-password">Password:</label>
+          <input type="password" id="login-password" name="password" required><br>
+          <button type="submit">Login</button>
+        </form>
+        <p>Don't have an account? <a href="#" id="show-signup">Sign up</a></p>
+      </div>
+      <div id="signup-form" style="display: none;">
+        <h2>Sign Up</h2>
+        <form id="signup">
+          <label for="signup-username">Username:</label>
+          <input type="text" id="signup-username" name="username" required><br>
+          <label for="signup-password">Password:</label>
+          <input type="password" id="signup-password" name="password" required><br>
+          <button type="submit">Sign Up</button>
+        </form>
+        <p>Already have an account? <a href="#" id="show-login">Login</a></p>
+      </div>
+    </div>
+    <div id="user-info" style="display: none;">
+      <h2>Welcome, <span id="username"></span>!</h2>
+      <button id="logout">Logout</button>
+    </div>
+    <div id="message"></div>
   </section>
 
   <footer>

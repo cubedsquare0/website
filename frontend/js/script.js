@@ -1,6 +1,18 @@
 // script.js
 
-const API_BASE = 'http://localhost:3000'; // For local testing with Node.js backend. Replace with your Cloudflare Worker URL for production.
+let apiBase = 'http://localhost:3000'; // Default, will be updated from config
+
+// Load config from server
+function loadConfig() {
+  return fetch('/api/config')
+    .then(response => response.json())
+    .then(data => {
+      apiBase = data.apiBase;
+    })
+    .catch(() => {
+      // Keep default if fetch fails
+    });
+}
 
 // Cart functionality
 let cart = [];
@@ -24,7 +36,7 @@ function toggleCart() {
 
 // Load news dynamically
 function loadNews() {
-  fetch(`${API_BASE}/api/news`)
+  fetch(`${apiBase}/api/news`)
     .then(response => response.json())
     .then(data => {
       const newsContainer = document.getElementById('news-container');
@@ -42,7 +54,7 @@ function loadNews() {
 
 // Load store items
 function loadStore() {
-  fetch(`${API_BASE}/api/store`)
+  fetch(`${apiBase}/api/store`)
     .then(response => response.json())
     .then(data => {
       const storeContainer = document.getElementById('store-container');
@@ -83,11 +95,103 @@ function displayPosts() {
   }
 }
 
+// Auth functionality
+function showMessage(message, type = 'info') {
+  const msgDiv = document.getElementById('message');
+  msgDiv.innerHTML = `<p class="${type}">${message}</p>`;
+  setTimeout(() => msgDiv.innerHTML = '', 5000);
+}
+
+function checkUser() {
+  fetch(`${apiBase}/api/user`)
+    .then(response => response.json())
+    .then(data => {
+      if (data.username) {
+        document.getElementById('auth-forms').style.display = 'none';
+        document.getElementById('user-info').style.display = 'block';
+        document.getElementById('username').textContent = data.username;
+      } else {
+        document.getElementById('auth-forms').style.display = 'block';
+        document.getElementById('user-info').style.display = 'none';
+      }
+    })
+    .catch(() => {
+      document.getElementById('auth-forms').style.display = 'block';
+      document.getElementById('user-info').style.display = 'none';
+    });
+}
+
+function login(event) {
+  event.preventDefault();
+  const formData = new FormData(event.target);
+  const data = Object.fromEntries(formData);
+
+  fetch(`${apiBase}/login`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  })
+  .then(response => response.json())
+  .then(result => {
+    if (result.message) {
+      showMessage(result.message, 'success');
+      checkUser();
+    } else {
+      showMessage(result.error, 'error');
+    }
+  });
+}
+
+function signup(event) {
+  event.preventDefault();
+  const formData = new FormData(event.target);
+  const data = Object.fromEntries(formData);
+
+  fetch(`${apiBase}/signup`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  })
+  .then(response => response.json())
+  .then(result => {
+    if (result.message) {
+      showMessage(result.message, 'success');
+      document.getElementById('show-login').click();
+    } else {
+      showMessage(result.error, 'error');
+    }
+  });
+}
+
+function logout() {
+  fetch(`${apiBase}/logout`, { method: 'POST' })
+  .then(response => response.json())
+  .then(result => {
+    showMessage(result.message, 'success');
+    checkUser();
+  });
+}
+
+function toggleForm(show) {
+  const loginForm = document.getElementById('login-form');
+  const signupForm = document.getElementById('signup-form');
+  if (show === 'signup') {
+    loginForm.style.display = 'none';
+    signupForm.style.display = 'block';
+  } else {
+    signupForm.style.display = 'none';
+    loginForm.style.display = 'block';
+  }
+}
+
 // Event listeners
 document.addEventListener('DOMContentLoaded', () => {
-  loadNews();
-  loadStore();
-  displayPosts();
+  loadConfig().then(() => {
+    loadNews();
+    loadStore();
+    displayPosts();
+    checkUser(); // Check user on page load
+  });
 
   const cartToggle = document.getElementById('cart-toggle');
   if (cartToggle) {
@@ -97,5 +201,31 @@ document.addEventListener('DOMContentLoaded', () => {
   const addPostBtn = document.getElementById('add-post-btn');
   if (addPostBtn) {
     addPostBtn.addEventListener('click', addPost);
+  }
+
+  // Auth event listeners
+  const loginForm = document.getElementById('login');
+  if (loginForm) {
+    loginForm.addEventListener('submit', login);
+  }
+
+  const signupForm = document.getElementById('signup');
+  if (signupForm) {
+    signupForm.addEventListener('submit', signup);
+  }
+
+  const logoutBtn = document.getElementById('logout');
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', logout);
+  }
+
+  const showSignup = document.getElementById('show-signup');
+  if (showSignup) {
+    showSignup.addEventListener('click', () => toggleForm('signup'));
+  }
+
+  const showLogin = document.getElementById('show-login');
+  if (showLogin) {
+    showLogin.addEventListener('click', () => toggleForm('login'));
   }
 });
