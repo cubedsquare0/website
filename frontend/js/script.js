@@ -37,7 +37,10 @@ function toggleCart() {
 // Load news dynamically
 function loadNews() {
   fetch(`${apiBase}/api/news`)
-    .then(response => response.json())
+    .then(response => {
+      if (!response.ok) throw new Error('Failed to fetch news');
+      return response.json();
+    })
     .then(data => {
       const newsContainer = document.getElementById('news-container');
       if (newsContainer) {
@@ -49,13 +52,17 @@ function loadNews() {
           </div>
         `).join('');
       }
-    });
+    })
+    .catch(error => console.error('Error loading news:', error));
 }
 
 // Load store items
 function loadStore() {
   fetch(`${apiBase}/api/store`)
-    .then(response => response.json())
+    .then(response => {
+      if (!response.ok) throw new Error('Failed to fetch store items');
+      return response.json();
+    })
     .then(data => {
       const storeContainer = document.getElementById('store-container');
       if (storeContainer) {
@@ -67,7 +74,8 @@ function loadStore() {
           </div>
         `).join('');
       }
-    });
+    })
+    .catch(error => console.error('Error loading store:', error));
 }
 
 // Simple forum functionality
@@ -104,7 +112,10 @@ function showMessage(message, type = 'info') {
 
 function checkUser() {
   fetch(`${apiBase}/api/user`)
-    .then(response => response.json())
+    .then(response => {
+      if (!response.ok) throw new Error('Failed to fetch user');
+      return response.json();
+    })
     .then(data => {
       if (data.username) {
         document.getElementById('auth-forms').style.display = 'none';
@@ -126,12 +137,15 @@ function login(event) {
   const formData = new FormData(event.target);
   const data = Object.fromEntries(formData);
 
-  fetch(`${apiBase}/login`, {
+  fetch(`${apiBase}/api/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data)
   })
-  .then(response => response.json())
+  .then(response => {
+    if (!response.ok) throw new Error('Login failed');
+    return response.json();
+  })
   .then(result => {
     if (result.message) {
       showMessage(result.message, 'success');
@@ -139,7 +153,8 @@ function login(event) {
     } else {
       showMessage(result.error, 'error');
     }
-  });
+  })
+  .catch(error => showMessage(error.message, 'error'));
 }
 
 function signup(event) {
@@ -147,12 +162,15 @@ function signup(event) {
   const formData = new FormData(event.target);
   const data = Object.fromEntries(formData);
 
-  fetch(`${apiBase}/signup`, {
+  fetch(`${apiBase}/api/signup`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data)
   })
-  .then(response => response.json())
+  .then(response => {
+    if (!response.ok) throw new Error('Signup failed');
+    return response.json();
+  })
   .then(result => {
     if (result.message) {
       showMessage(result.message, 'success');
@@ -160,12 +178,17 @@ function signup(event) {
     } else {
       showMessage(result.error, 'error');
     }
-  });
-}
-
-function logout() {
-  fetch(`${apiBase}/logout`, { method: 'POST' })
-  .then(response => response.json())
+  })
+  .catch(error => shapi/logout`, { method: 'POST' })
+  .then(response => {
+    if (!response.ok) throw new Error('Logout failed');
+    return response.json();
+  })
+  .then(result => {
+    showMessage(result.message, 'success');
+    checkUser();
+  })
+  .catch(error => showMessage(error.message, 'error')then(response => response.json())
   .then(result => {
     showMessage(result.message, 'success');
     checkUser();

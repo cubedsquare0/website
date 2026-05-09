@@ -29,6 +29,12 @@ async function handleRequest(request) {
     return new Response(null, { headers: corsHeaders });
   }
 
+  if (url.pathname === '/api/config') {
+    return new Response(JSON.stringify({ apiBase: 'https://cubesquared0server.cubedsquared0.workers.dev' }), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+    });
+  }
+
   if (url.pathname === '/api/news') {
     return new Response(JSON.stringify(news), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' }
@@ -37,6 +43,30 @@ async function handleRequest(request) {
 
   if (url.pathname === '/api/store') {
     return new Response(JSON.stringify(storeItems), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+    });
+  }
+
+  if (url.pathname === '/api/user') {
+    return new Response(JSON.stringify({ username: null }), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+    });
+  }
+
+  if (url.pathname === '/api/login' && request.method === 'POST') {
+    return new Response(JSON.stringify({ message: 'Login successful' }), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+    });
+  }
+
+  if (url.pathname === '/api/signup' && request.method === 'POST') {
+    return new Response(JSON.stringify({ message: 'Signup successful' }), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+    });
+  }
+
+  if (url.pathname === '/api/logout' && request.method === 'POST') {
+    return new Response(JSON.stringify({ message: 'Logout successful' }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' }
     });
   }
