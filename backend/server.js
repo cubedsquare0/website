@@ -1,7 +1,15 @@
 const express = require('express');
 const path = require('path');
+const rateLimit = require('express-rate-limit');
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// Apply rate limiting to all requests
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100 // limit each IP to 100 requests per windowMs
+});
+app.use(limiter);
 
 // Serve static files from the frontend directory
 app.use(express.static(path.join(__dirname, '../frontend')));

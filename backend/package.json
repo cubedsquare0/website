@@ -15,7 +15,8 @@
     "start": "node server.js"
   },
   "dependencies": {
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.5.1"
   },
   "devDependencies": {
     "@semantic-release/commit-analyzer": "^13.0.1",
