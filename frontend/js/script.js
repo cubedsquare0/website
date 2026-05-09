@@ -1,6 +1,6 @@
 // script.js
 
-let apiBase = 'http://localhost:3000'; // Default, will be updated from config
+let apiBase = 'http://cubesquared0server.cubedsquare0.workers.dev'; // Default, will be updated from config
 
 // Load config from server
 function loadConfig() {
