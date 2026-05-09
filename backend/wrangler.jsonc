@@ -1,17 +1,26 @@
-{
-  "observability": {
-    "enabled": true,
-    "head_sampling_rate": 1,
-    "logs": {
-      "enabled": true,
-      "head_sampling_rate": 1,
-      "persist": true,
-      "invocation_logs": true
-    },
-    "traces": {
-      "enabled": false,
-      "persist": true,
-      "head_sampling_rate": 1
-    }
-  }
-}
+# wrangler.toml - Cloudflare Worker configuration
+
+# The name of your Worker
+name = "website-api"
+
+# The main Worker script file
+main = "worker.js"
+
+# Cloudflare compatibility date (use today or the date you last tested)
+compatibility_date = "2026-05-09"
+
+# Observability settings
+[observability]
+enabled = true
+head_sampling_rate = 1
+
+  [observability.logs]
+  enabled = true
+  head_sampling_rate = 1
+  persist = true
+  invocation_logs = true
+
+  [observability.traces]
+  enabled = false
+  persist = true
+  head_sampling_rate = 1
