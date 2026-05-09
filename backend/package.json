@@ -1,12 +1,27 @@
 {
-  "name": "cubed-square-website-backend",
+  "name": "@cubedsquare0/cubed-square-website-backend",
   "version": "1.0.0",
   "description": "Backend for Cubed Square website",
   "main": "server.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cubedsquare0/website.git",
+    "directory": "backend"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
   "scripts": {
     "start": "node server.js"
   },
   "dependencies": {
     "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "@semantic-release/commit-analyzer": "^13.0.1",
+    "@semantic-release/github": "^12.0.8",
+    "@semantic-release/npm": "^13.1.5",
+    "@semantic-release/release-notes-generator": "^14.1.1",
+    "semantic-release": "^25.0.3"
   }
 }
